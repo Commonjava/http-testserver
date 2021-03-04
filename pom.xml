@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (C) 2015 Red Hat, Inc. (jdcasey@commonjava.org)
+    Copyright (C) 2011-2021 Red Hat, Inc. (http://github.com/Commonjava/http-testserver)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
   <parent>
     <groupId>org.commonjava</groupId>
     <artifactId>commonjava</artifactId>
-    <version>11</version>
+    <version>16</version>
   </parent>
 
   <groupId>org.commonjava.util</groupId>
-  <artifactId>http-testserver</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <artifactId>http-testserver-parent</artifactId>
+  <version>2.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
   <name>http-testserver</name>
-  <inceptionYear>2015</inceptionYear>
+  <inceptionYear>2011-2021</inceptionYear>
   
   <scm>
     <connection>scm:git:https://github.com/Commonjava/http-testserver.git</connection>
@@ -40,8 +40,10 @@
   
   <properties>
     <projectOwner>Red Hat, Inc.</projectOwner>
+    <projectEmail>http://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>1.8</javaVersion>
-    <undertowVersion>1.1.2.Final</undertowVersion>
+    <undertowVersion>2.0.27.Final</undertowVersion>
+    <slf4j.versoin>1.7.25</slf4j.versoin>
   </properties>
 
   <dependencyManagement>
@@ -49,7 +51,7 @@
       <dependency>
         <groupId>org.commonjava.boms</groupId>
         <artifactId>web-commons-bom</artifactId>
-        <version>16</version>
+        <version>26</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -63,50 +65,17 @@
         <artifactId>undertow-servlet</artifactId>
         <version>${undertowVersion}</version>
       </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>3.4.0.Final</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
-  <dependencies>
-    <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-servlet</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>core</module>
+    <module>junit4</module>
+  </modules>
+
 </project>
