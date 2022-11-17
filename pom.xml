@@ -40,8 +40,10 @@
   
   <properties>
     <projectOwner>Red Hat, Inc.</projectOwner>
-    <javaVersion>1.8</javaVersion>
+    <projectEmail>http://github.com/Commonjava/http-testserver</projectEmail>
+    <javaVersion>11</javaVersion>
     <undertowVersion>1.1.2.Final</undertowVersion>
+    <slf4j.versoin>1.7.25</slf4j.versoin>
   </properties>
 
   <dependencyManagement>
