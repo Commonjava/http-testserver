@@ -57,9 +57,23 @@ public class ExpectationServer
         this( null );
     }
 
+    public ExpectationServer( final int port )
+    {
+        this( null, port );
+    }
+
     public ExpectationServer( final String baseResource )
     {
         servlet = new ExpectationServlet( baseResource );
+    }
+
+    public ExpectationServer( final String baseResource, final int port )
+    {
+        servlet = new ExpectationServlet( baseResource );
+        if ( port >= 80 )
+        {
+            this.port = port;
+        }
     }
 
     public int getPort()
@@ -90,7 +104,6 @@ public class ExpectationServer
     }
 
     public ExpectationServer start()
-            throws IOException
     {
         final ServletInfo si = Servlets.servlet( "TEST", ExpectationServlet.class )
                                        .addMapping( "*" )
@@ -107,25 +120,42 @@ public class ExpectationServer
         final DeploymentManager dm = Servlets.defaultContainer().addDeployment( di );
         dm.deploy();
 
-        final AtomicReference<Integer> foundPort = new AtomicReference<>();
-        server = PortFinder.findPortFor( 16, p-> {
-            foundPort.set( Integer.valueOf( p ) );
+        boolean started = false;
+        if ( this.port != null && this.port >= 80 )
+        {
             try
             {
-                Undertow s = Undertow.builder().setHandler( dm.start() ).addHttpListener( p, "127.0.0.1" ).build();
-                s.start();
-
-                return s;
+                server = Undertow.builder().setHandler( dm.start() ).addHttpListener( this.port, "127.0.0.1" ).build();
+                server.start();
+                started = true;
             }
-            catch ( ServletException e )
+            catch ( Exception e )
             {
-                throw new IOException( "Failed to start: " + e.getMessage(), e );
+                logger.warn( "The port {} is occupied, will find another port to try!", this.port );
             }
-        } );
+        }
+        if ( !started )
+        {
+            final AtomicReference<Integer> foundPort = new AtomicReference<>();
+            server = PortFinder.findPortFor( 16, p -> {
+                foundPort.set( p );
+                try
+                {
+                    Undertow s = Undertow.builder().setHandler( dm.start() ).addHttpListener( p, "127.0.0.1" ).build();
+                    s.start();
 
-        this.port = foundPort.get();
+                    return s;
+                }
+                catch ( ServletException e )
+                {
+                    throw new IOException( "Failed to start: " + e.getMessage(), e );
+                }
+            } );
 
-        logger.info( "STARTED Test HTTP Server on 127.0.0.1:" + port );
+            this.port = foundPort.get();
+        }
+
+        logger.info( "STARTED Test HTTP Server on 127.0.0.1:{}", port );
 
         return this;
     }
@@ -231,7 +261,7 @@ public class ExpectationServer
         servlet.expect( method, testUrl, responseCode, bodyStream );
     }
 
-    public void expect( final String method, final String testUrl, ExpectationHandler handler)
+    public void expect( final String method, final String testUrl, ExpectationHandler handler )
             throws Exception
     {
         servlet.expect( method, testUrl, handler );
