@@ -21,7 +21,7 @@
   <parent>
     <groupId>org.commonjava</groupId>
     <artifactId>commonjava</artifactId>
-    <version>11</version>
+    <version>18</version>
   </parent>
 
   <groupId>org.commonjava.util</groupId>
@@ -29,7 +29,7 @@
   <version>1.5-SNAPSHOT</version>
 
   <name>http-testserver</name>
-  <inceptionYear>2015</inceptionYear>
+  <inceptionYear>2015-2022</inceptionYear>
   
   <scm>
     <connection>scm:git:https://github.com/Commonjava/http-testserver.git</connection>
@@ -42,7 +42,7 @@
     <projectOwner>Red Hat, Inc.</projectOwner>
     <projectEmail>http://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>11</javaVersion>
-    <undertowVersion>1.1.2.Final</undertowVersion>
+    <undertowVersion>2.2.26.Final</undertowVersion>
     <slf4j.versoin>1.7.25</slf4j.versoin>
   </properties>
 
@@ -51,7 +51,7 @@
       <dependency>
         <groupId>org.commonjava.boms</groupId>
         <artifactId>web-commons-bom</artifactId>
-        <version>16</version>
+        <version>26</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -64,6 +64,11 @@
         <groupId>io.undertow</groupId>
         <artifactId>undertow-servlet</artifactId>
         <version>${undertowVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>3.4.0.Final</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
