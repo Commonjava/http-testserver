@@ -32,15 +32,15 @@
   <inceptionYear>2011-2022</inceptionYear>
   
   <scm>
-    <connection>scm:git:https://github.com/Commonjava/http-testserver.git</connection>
-    <developerConnection>scm:git:git@github.com:Commonjava/http-testserver.git</developerConnection>
+    <connection>scm:git:https://github.com/Commonjava/http-testserver</connection>
+    <developerConnection>scm:git:https@github.com:Commonjava/http-testserver</developerConnection>
     <url>https://github.com/Commonjava/http-testserver</url>
     <tag>HEAD</tag>
   </scm>
   
   <properties>
     <projectOwner>Red Hat, Inc.</projectOwner>
-    <projectEmail>http://github.com/Commonjava/http-testserver</projectEmail>
+    <projectEmail>https://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>11</javaVersion>
     <undertowVersion>2.2.26.Final</undertowVersion>
     <slf4j.versoin>1.7.25</slf4j.versoin>
