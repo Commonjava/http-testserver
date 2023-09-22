@@ -18,107 +18,48 @@ Usage is pretty simple:
         final String content = "this is the content";
         final String url = server.formatUrl( pathParts );
         server.expect( url, 200, content );
-
-        final HttpGet request = new HttpGet( url );
-        final CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-
-        InputStream stream = null;
-        try
-        {
-            response = client.execute( request );
-            stream = response.getEntity()
-                             .getContent();
-            final String result = IOUtils.toString( stream );
-
-            assertThat( result, notNullValue() );
-            assertThat( result, equalTo( content ) );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-            if ( response != null && response.getEntity() != null )
-            {
-                EntityUtils.consumeQuietly( response.getEntity() );
-                IOUtils.closeQuietly( response );
-            }
-
-            if ( request != null )
-            {
-                request.reset();
-            }
-
-            if ( client != null )
-            {
-                IOUtils.closeQuietly( client );
-            }
-        }
-
-        assertThat( server.getAccessesByPathKey()
-                          .get( server.getAccessKey( CommonMethod.GET.name(), pathParts ) ), equalTo( 1 ) );
+        // Do any assertions....
+        .......
     }
 
 
-####For junit 5:
+####For junit 5 Extension Based:
 
-    public ExpectationServer server = new ExpectationServer( "repos" );
- 
-    @BeforeEach
-    public void before() throws Exception
-    {
-       server.start();
-    }
+    @ExtendWith(ExpectationServerExtension.class)
+    pulic class ExpectaionTest{
 
-    @AfterEach
-    public void after() throws Exception
-    {
-       server.stop();
-    }
-
-    @Test
-    public void run()
-        throws Exception
-    {        
-        final String pathParts = "/repos/pathParts/to/something.txt";
-        final String content = "this is the content";
-        final String url = server.formatUrl( pathParts );
-        server.expect( url, 200, content );
-
-        final HttpGet request = new HttpGet( url );
-        final CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-
-        InputStream stream = null;
-        try
+        @Expected("repos")
+        public ExpectationServer server;
+     
+        @Test
+        public void run()
+            throws Exception
         {
-            response = client.execute( request );
-            stream = response.getEntity()
-                             .getContent();
-            final String result = IOUtils.toString( stream );
-
-            assertThat( result, notNullValue() );
-            assertThat( result, equalTo( content ) );
+            final String pathParts = "/repos/pathParts/to/something.txt";
+            final String content = "this is the content";
+            final String url = server.formatUrl( pathParts );
+            server.expect( url, 200, content );
+            // Do any assertions....
+            .......
         }
-        finally
+    }
+or:
+
+    pulic class ExpectaionTest{
+
+        @RegisterExtension
+        public ExpectationServerExtension extension = new ExpectationServerExtension("repos");
+     
+        @Test
+        public void run()
+            throws Exception
         {
-            IOUtils.closeQuietly( stream );
-            if ( response != null && response.getEntity() != null )
-            {
-                EntityUtils.consumeQuietly( response.getEntity() );
-                IOUtils.closeQuietly( response );
-            }
-
-            if ( request != null )
-            {
-                request.reset();
-            }
-
-            if ( client != null )
-            {
-                IOUtils.closeQuietly( client );
-            }
+            final ExpectationServer server = extension.getServer();
+            final String pathParts = "/repos/pathParts/to/something.txt";
+            final String content = "this is the content";
+            final String url = server.formatUrl( pathParts );
+            server.expect( url, 200, content );
+            // Do any assertions....
+            .......
         }
-
-        assertThat( server.getAccessesByPathKey()
-                          .get( server.getAccessKey( CommonMethod.GET.name(), pathParts ) ), equalTo( 1 ) );
     }

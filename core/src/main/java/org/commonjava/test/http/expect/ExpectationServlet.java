@@ -15,6 +15,15 @@
  */
 package org.commonjava.test.http.expect;
 
+import org.apache.commons.io.IOUtils;
+import org.commonjava.test.http.common.CommonMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,19 +33,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpStatus;
-import org.commonjava.test.http.common.CommonMethod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+@SuppressWarnings( "unused" )
 public final class ExpectationServlet
-    extends HttpServlet
+        extends HttpServlet
 {
     private final Logger logger = LoggerFactory.getLogger( getClass() );
 
@@ -108,13 +107,13 @@ public final class ExpectationServlet
         }
         catch ( final MalformedURLException e )
         {
+            //Do nothing
         }
 
         return realPath;
     }
 
     public void expect( final String method, final String testUrl, final int responseCode, final String body )
-        throws Exception
     {
         final String path = getPath( testUrl );
         final String key = getAccessKey( method, path );
@@ -124,14 +123,12 @@ public final class ExpectationServlet
 
     public void expect( final String method, final String testUrl, final int responseCode,
                         final InputStream bodyStream )
-        throws Exception
     {
         final String path = getPath( testUrl );
 
         final String key = getAccessKey( method, path );
         logger.info( "Registering expectation: {}, code: {}, body stream:\n{}", key, responseCode, bodyStream );
-        expectations.put( key, new ContentResponse( method, path, responseCode,
-                                                                                  bodyStream ) );
+        expectations.put( key, new ContentResponse( method, path, responseCode, bodyStream ) );
     }
 
     public void expect( String method, String testUrl, ExpectationHandler handler )
@@ -145,7 +142,7 @@ public final class ExpectationServlet
 
     @Override
     protected void service( final HttpServletRequest req, final HttpServletResponse resp )
-        throws ServletException, IOException
+            throws ServletException, IOException
     {
         String wholePath;
         try
@@ -167,15 +164,7 @@ public final class ExpectationServlet
 
         logger.info( "Looking up expectation for: {}", key );
 
-        final Integer i = accessesByPath.get( key );
-        if ( i == null )
-        {
-            accessesByPath.put( key, 1 );
-        }
-        else
-        {
-            accessesByPath.put( key, i + 1 );
-        }
+        accessesByPath.merge( key, 1, Integer::sum );
 
         logger.info( "Looking for error: '{}' in:\n{}", key, errors );
         if ( errors.containsKey( key ) )
@@ -222,8 +211,7 @@ public final class ExpectationServlet
                 resp.setStatus( expectation.code() );
 
                 logger.info( "Set status: {} with body string", expectation.code() );
-                resp.getWriter()
-                    .write( expectation.body() );
+                resp.getWriter().write( expectation.body() );
             }
             else if ( expectation.bodyStream() != null )
             {
