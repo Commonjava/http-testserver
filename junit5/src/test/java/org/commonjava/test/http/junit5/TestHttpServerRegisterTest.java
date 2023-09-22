@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.commonjava.test.http;
+package org.commonjava.test.http.junit5;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,27 +23,28 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.commonjava.test.http.common.CommonMethod;
 import org.commonjava.test.http.expect.ExpectationServer;
-import org.commonjava.test.http.expect.ExpectationServerRule;
-import org.junit.Rule;
-import org.junit.Test;
+import org.commonjava.test.http.junit5.annotations.Expected;
+import org.commonjava.test.http.junit5.expect.ExpectationServerExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TestHttpServerTest
+public class TestHttpServerRegisterTest
 {
-
-    @Rule
-    public ExpectationServerRule serverRule = new ExpectationServerRule( "repos" );
+    @RegisterExtension
+    private final ExpectationServerExtension expected = new ExpectationServerExtension( "repos" );
 
     @Test
     public void simpleDownload()
             throws Exception
     {
-        final ExpectationServer server = serverRule.getServer();
+        final ExpectationServer server = expected.getServer();
         final String subPath = "/path/to/something.txt";
         final String content = "this is the content";
         final String url = server.formatUrl( subPath );

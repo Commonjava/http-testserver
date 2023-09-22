@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings( "unused" )
 public class ExpectationServer
         implements HttpServerFixture<ExpectationServer>
 {
@@ -75,7 +76,6 @@ public class ExpectationServer
     }
 
     public ExpectationServer start()
-            throws IOException
     {
         final ServletInfo si = Servlets.servlet( "TEST", ExpectationServlet.class )
                                        .addMapping( "*" )
@@ -94,7 +94,7 @@ public class ExpectationServer
 
         final AtomicReference<Integer> foundPort = new AtomicReference<>();
         server = PortFinder.findPortFor( 16, p -> {
-            foundPort.set( Integer.valueOf( p ) );
+            foundPort.set( p );
             try
             {
                 Undertow s = Undertow.builder().setHandler( dm.start() ).addHttpListener( p, "127.0.0.1" ).build();
@@ -217,7 +217,6 @@ public class ExpectationServer
     }
 
     public void expect( final String method, final String testUrl, ExpectationHandler handler )
-            throws Exception
     {
         servlet.expect( method, testUrl, handler );
     }

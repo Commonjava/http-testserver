@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.commonjava.test.http.stream;
+package org.commonjava.test.http.junit4.stream;
 
+import org.commonjava.test.http.stream.StreamResolver;
+import org.commonjava.test.http.stream.StreamServer;
 import org.junit.rules.ExternalResource;
 
 public class StreamServerRule
