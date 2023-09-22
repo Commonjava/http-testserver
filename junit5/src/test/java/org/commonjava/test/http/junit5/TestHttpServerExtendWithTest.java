@@ -38,14 +38,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TestHttpServerExtendWithTest
 {
     //    @RegisterExtension
-    @Expected( base = "repos" )
+    @Expected( base = "repos", port = 9090)
     private ExpectationServer server;
 
     @Test
     public void simpleDownload()
             throws Exception
     {
-        // final ExpectationServer server = expected.getServer();
         final String subPath = "/path/to/something.txt";
         final String content = "this is the content";
         final String url = server.formatUrl( subPath );
