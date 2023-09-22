@@ -28,4 +28,6 @@ import java.lang.annotation.Target;
 public @interface Expected
 {
     String base() default "";
+
+    int port() default 0;
 }

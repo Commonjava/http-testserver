@@ -21,12 +21,16 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
 public class ExpectationServerExtension
         implements AfterEachCallback, BeforeEachCallback, TestInstancePostProcessor
 {
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
+
     private ExpectationServer server;
 
     @SuppressWarnings( "unused" )
@@ -67,10 +71,13 @@ public class ExpectationServerExtension
             {
                 Expected expected = field.getAnnotation( Expected.class );
                 String base = expected.base();
-                this.server = new ExpectationServer( base );
+                int port = expected.port();
+                logger.debug( "Found field with @Expected annotation, base resource is {}, port is {}", base, port );
+                this.server = new ExpectationServer( base, port );
                 field.setAccessible( true );
                 if ( field.getType().equals( ExpectationServer.class ) )
                 {
+                    logger.debug( "Injecting the field {} with server instance", field.getName() );
                     field.set( testInstance, this.server );
                     return;
                 }
