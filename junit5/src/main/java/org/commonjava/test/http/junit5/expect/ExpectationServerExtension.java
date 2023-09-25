@@ -67,20 +67,18 @@ public class ExpectationServerExtension
     {
         for ( Field field : testInstance.getClass().getDeclaredFields() )
         {
-            if ( field.isAnnotationPresent( Expected.class ) )
+            if ( field.isAnnotationPresent( Expected.class ) && field.getType().equals( ExpectationServer.class ) )
             {
+
                 Expected expected = field.getAnnotation( Expected.class );
                 String base = expected.base();
                 int port = expected.port();
                 logger.debug( "Found field with @Expected annotation, base resource is {}, port is {}", base, port );
                 this.server = new ExpectationServer( base, port );
                 field.setAccessible( true );
-                if ( field.getType().equals( ExpectationServer.class ) )
-                {
-                    logger.debug( "Injecting the field {} with server instance", field.getName() );
-                    field.set( testInstance, this.server );
-                    return;
-                }
+                logger.debug( "Injecting the field {} with server instance", field.getName() );
+                field.set( testInstance, this.server );
+                return;
             }
         }
     }

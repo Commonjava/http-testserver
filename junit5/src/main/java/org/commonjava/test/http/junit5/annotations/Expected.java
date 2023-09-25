@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used to help inject the
+ * This annotation is used to help inject an http test server into a test instance field by the {@link org.commonjava.test.http.junit5.expect.ExpectationServerExtension}
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.FIELD )
