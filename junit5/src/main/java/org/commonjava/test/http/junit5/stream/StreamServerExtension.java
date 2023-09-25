@@ -44,14 +44,12 @@ public class StreamServerExtension
 
     @Override
     public void afterEach( ExtensionContext extensionContext )
-            throws Exception
     {
         server.stop();
     }
 
     @Override
     public void beforeEach( ExtensionContext extensionContext )
-            throws Exception
     {
         server.start();
     }
