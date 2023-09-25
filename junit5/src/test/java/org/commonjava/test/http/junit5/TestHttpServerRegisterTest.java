@@ -36,60 +36,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestHttpServerRegisterTest
+        extends AbstractExtensionTest
 {
     @RegisterExtension
     private final ExpectationServerExtension expected = new ExpectationServerExtension( "repos" );
 
-    @Test
-    public void simpleDownload()
-            throws Exception
+    @Override
+    protected ExpectationServer getServer()
     {
-        final ExpectationServer server = expected.getServer();
-        final String subPath = "/path/to/something.txt";
-        final String content = "this is the content";
-        final String url = server.formatUrl( subPath );
-        final String path = server.formatPath( subPath );
-        server.expect( url, 200, content );
-
-        final HttpGet request = new HttpGet( url );
-        final CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-
-        InputStream stream = null;
-        try
-        {
-            response = client.execute( request );
-            stream = response.getEntity().getContent();
-            final String result = IOUtils.toString( stream );
-
-            assertThat( result, notNullValue() );
-            assertThat( result, equalTo( content ) );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-            if ( response != null && response.getEntity() != null )
-            {
-                EntityUtils.consumeQuietly( response.getEntity() );
-                IOUtils.closeQuietly( response );
-            }
-
-            if ( request != null )
-            {
-                request.reset();
-            }
-
-            if ( client != null )
-            {
-                IOUtils.closeQuietly( client );
-            }
-        }
-
-        System.out.println( server.getAccessesByPathKey() );
-
-        final String key = server.getAccessKey( CommonMethod.GET.name(), path );
-        System.out.println( "Getting accesses for: '" + key + "'" );
-        assertThat( server.getAccessesByPathKey().get( key ), equalTo( 1 ) );
+        return this.expected.getServer();
     }
-
 }

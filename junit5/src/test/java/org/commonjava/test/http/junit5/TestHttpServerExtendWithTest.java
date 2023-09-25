@@ -31,65 +31,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith( ExpectationServerExtension.class )
 public class TestHttpServerExtendWithTest
+        extends AbstractExtensionTest
 {
     //    @RegisterExtension
-    @Expected( base = "repos", port = 9090)
+    @Expected( base = "repos", port = 9090 )
     private ExpectationServer server;
 
-    @Test
-    public void simpleDownload()
-            throws Exception
+    @Override
+    protected ExpectationServer getServer()
     {
-        final String subPath = "/path/to/something.txt";
-        final String content = "this is the content";
-        final String url = server.formatUrl( subPath );
-        final String path = server.formatPath( subPath );
-        server.expect( url, 200, content );
-
-        final HttpGet request = new HttpGet( url );
-        final CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-
-        InputStream stream = null;
-        try
-        {
-            response = client.execute( request );
-            stream = response.getEntity().getContent();
-            final String result = IOUtils.toString( stream );
-
-            assertThat( result, notNullValue() );
-            assertThat( result, equalTo( content ) );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-            if ( response != null && response.getEntity() != null )
-            {
-                EntityUtils.consumeQuietly( response.getEntity() );
-                IOUtils.closeQuietly( response );
-            }
-
-            if ( request != null )
-            {
-                request.reset();
-            }
-
-            if ( client != null )
-            {
-                IOUtils.closeQuietly( client );
-            }
-        }
-
-        System.out.println( server.getAccessesByPathKey() );
-
-        final String key = server.getAccessKey( CommonMethod.GET.name(), path );
-        System.out.println( "Getting accesses for: '" + key + "'" );
-        assertThat( server.getAccessesByPathKey().get( key ), equalTo( 1 ) );
+        return this.server;
     }
-
 }
