@@ -92,7 +92,6 @@ public class StreamServer
     }
 
     public StreamServer start()
-            throws IOException
     {
         final ServletInfo si = Servlets.servlet( "TEST", StreamServlet.class )
                                        .addMapping( "*" )

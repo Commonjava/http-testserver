@@ -26,7 +26,7 @@ Usage is pretty simple:
 ####For junit 5 Extension Based:
 
     @ExtendWith(ExpectationServerExtension.class)
-    pulic class ExpectaionTest{
+    public class ExpectaionTest{
 
         @Expected("repos")
         public ExpectationServer server;
@@ -45,7 +45,7 @@ Usage is pretty simple:
     }
 or:
 
-    pulic class ExpectaionTest{
+    public class ExpectaionTest{
 
         @RegisterExtension
         public ExpectationServerExtension extension = new ExpectationServerExtension("repos");
