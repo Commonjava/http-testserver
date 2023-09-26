@@ -4,7 +4,7 @@ This is a test fixture, which provides a very basic servlet that registers expec
 
 Usage is pretty simple: 
 
-####For junit 4 Rule based
+#### For junit 4 Rule based
 
     @Rule
     public ExpectationServerRule serverRule = new ExpectationServerRule( "repos" );
@@ -23,7 +23,7 @@ Usage is pretty simple:
     }
 
 
-####For junit 5 Extension Based:
+#### For junit 5 Extension Based:
 
     @ExtendWith(ExpectationServerExtension.class)
     public class ExpectaionTest{
@@ -55,6 +55,31 @@ or:
             throws Exception
         {
             final ExpectationServer server = extension.getServer();
+            final String pathParts = "/repos/pathParts/to/something.txt";
+            final String content = "this is the content";
+            final String url = server.formatUrl( pathParts );
+            server.expect( url, 200, content );
+            // Do any assertions....
+            .......
+        }
+    }
+
+#### Quarkus Based Test
+
+There are some limitations to let junit5 @ExtendWith work together with @QuarkusTest, see https://github.com/quarkusio/quarkus/issues/24911#issuecomment-1098935690  
+So to make it work, here brings the new annotation to make it work.
+
+
+    @QuarkusTest
+    public class ExpectaionTest{
+
+        @InjectExpected("repos")
+        ExpectationServer server;
+     
+        @Test
+        public void run()
+            throws Exception
+        {
             final String pathParts = "/repos/pathParts/to/something.txt";
             final String content = "this is the content";
             final String url = server.formatUrl( pathParts );

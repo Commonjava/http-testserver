@@ -1,0 +1,2 @@
+org.commonjava.test.http.quarkus.internal.ExpectationServerCallBack
+org.commonjava.test.http.quarkus.internal.StreamServerCallBack
