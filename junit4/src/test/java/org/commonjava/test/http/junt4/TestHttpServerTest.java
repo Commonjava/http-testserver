@@ -23,7 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.commonjava.test.http.common.CommonMethod;
 import org.commonjava.test.http.expect.ExpectationServer;
-import org.commonjava.test.http.junit4.expect.ExpectationServerRule;
+import org.commonjava.test.http.junit4.expect.ExpectationServerWrapper;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class TestHttpServerTest
 {
 
     @Rule
-    public ExpectationServerRule serverRule = new ExpectationServerRule( "repos" );
+    public ExpectationServerWrapper serverRule = new ExpectationServerWrapper( "repos" );
 
     @Test
     public void simpleDownload()
