@@ -42,7 +42,7 @@
     <projectOwner>Red Hat, Inc.</projectOwner>
     <projectEmail>https://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>11</javaVersion>
-    <undertowVersion>2.2.26.Final</undertowVersion>
+    <undertowVersion>2.2.28.Final</undertowVersion>
     <slf4j.versoin>1.7.25</slf4j.versoin>
     <quarkus.version>2.16.11.Final</quarkus.version>
   </properties>
@@ -59,7 +59,7 @@
       <dependency>
         <groupId>org.commonjava.boms</groupId>
         <artifactId>web-commons-bom</artifactId>
-        <version>26</version>
+        <version>28</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
