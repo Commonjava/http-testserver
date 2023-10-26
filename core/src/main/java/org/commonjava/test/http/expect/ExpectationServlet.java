@@ -97,20 +97,17 @@ public final class ExpectationServlet
         return method.toUpperCase() + " " + path;
     }
 
-    private String getPath( final String path )
+    private String getPath( final String testUrl )
     {
-        String realPath = path;
         try
         {
-            final URL u = new URL( path );
-            realPath = u.getPath();
+            return new URL( testUrl ).getFile(); // path plus query parameters
         }
         catch ( final MalformedURLException e )
         {
-            //Do nothing
+            e.printStackTrace();
         }
-
-        return realPath;
+        return testUrl;
     }
 
     public void expect( final String method, final String testUrl, final int responseCode, final String body )
@@ -144,22 +141,7 @@ public final class ExpectationServlet
     protected void service( final HttpServletRequest req, final HttpServletResponse resp )
             throws ServletException, IOException
     {
-        String wholePath;
-        try
-        {
-            wholePath = new URI( req.getRequestURI() ).getPath();
-        }
-        catch ( final URISyntaxException e )
-        {
-            throw new ServletException( "Cannot parse request URI", e );
-        }
-
-        String path = wholePath;
-        if ( path.length() > 1 )
-        {
-            path = path.substring( 1 );
-        }
-
+        String wholePath = getWholePath( req );
         final String key = getAccessKey( req.getMethod(), wholePath );
 
         logger.info( "Looking up expectation for: {}", key );
@@ -230,6 +212,21 @@ public final class ExpectationServlet
         }
 
         resp.setStatus( 404 );
+    }
+
+    private String getWholePath( HttpServletRequest request )
+    {
+        String requestURI = request.getRequestURI();
+        String queryString = request.getQueryString();
+
+        if ( queryString == null )
+        {
+            return requestURI;
+        }
+        else
+        {
+            return requestURI + "?" + queryString;
+        }
     }
 
     public String getAccessKey( final CommonMethod method, final String path )
