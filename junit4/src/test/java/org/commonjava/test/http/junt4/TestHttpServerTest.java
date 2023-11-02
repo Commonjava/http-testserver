@@ -27,6 +27,7 @@ import org.commonjava.test.http.junit4.expect.ExpectationServerWrapper;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -50,45 +51,54 @@ public class TestHttpServerTest
         final String path = server.formatPath( subPath );
         server.expect( url, 200, content );
 
-        final HttpGet request = new HttpGet( url );
-        final CloseableHttpClient client = HttpClients.createDefault();
-        CloseableHttpResponse response = null;
-
-        InputStream stream = null;
-        try
-        {
-            response = client.execute( request );
-            stream = response.getEntity().getContent();
-            final String result = IOUtils.toString( stream );
-
-            assertThat( result, notNullValue() );
-            assertThat( result, equalTo( content ) );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( stream );
-            if ( response != null && response.getEntity() != null )
-            {
-                EntityUtils.consumeQuietly( response.getEntity() );
-                IOUtils.closeQuietly( response );
-            }
-
-            if ( request != null )
-            {
-                request.reset();
-            }
-
-            if ( client != null )
-            {
-                IOUtils.closeQuietly( client );
-            }
-        }
-
-        System.out.println( server.getAccessesByPathKey() );
+        String result = getHttpContent( url );
+        assertThat(result, equalTo(content));
 
         final String key = server.getAccessKey( CommonMethod.GET.name(), path );
         System.out.println( "Getting accesses for: '" + key + "'" );
         assertThat( server.getAccessesByPathKey().get( key ), equalTo( 1 ) );
     }
 
+    @Test
+    public void downloadWithQueryParams()
+            throws Exception
+    {
+        final ExpectationServer server = serverRule.getServer();
+
+        final String subPath = "/path/to/something";
+        final String path1 = subPath + "?version=1.0";
+        final String path2 = subPath + "?version=2.0";
+
+        final String url1 = server.formatUrl(path1);
+        final String url2 = server.formatUrl(path2);
+
+        final String content1 = "this is a test version 1";
+        final String content2 = "this is a test version 2";
+
+        server.expect(url1, 200, content1);
+        server.expect(url2, 200, content2);
+
+        String result = getHttpContent(url1);
+        assertThat(result, equalTo(content1));
+
+        result = getHttpContent(url2);
+        assertThat(result, equalTo(content2));
+
+    }
+
+    private String getHttpContent(String url) throws IOException
+    {
+        final HttpGet request = new HttpGet( url );
+        final CloseableHttpClient client = HttpClients.createDefault();
+
+        try(CloseableHttpResponse response = client.execute( request ))
+        {
+            InputStream stream = response.getEntity().getContent();
+            return IOUtils.toString( stream );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( client );
+        }
+    }
 }
