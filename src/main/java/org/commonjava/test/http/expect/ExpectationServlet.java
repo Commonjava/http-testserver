@@ -18,8 +18,6 @@ package org.commonjava.test.http.expect;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpStatus;
 import org.commonjava.test.http.common.CommonMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,7 +103,7 @@ public final class ExpectationServlet
         }
         catch ( final MalformedURLException e )
         {
-            e.printStackTrace();
+            //Do nothing
         }
         return testUrl;
     }
@@ -145,22 +142,31 @@ public final class ExpectationServlet
     protected void service( final HttpServletRequest req, final HttpServletResponse resp )
         throws ServletException, IOException
     {
-
         String wholePath = getWholePath( req );
-        final String key = getAccessKey( req.getMethod(), wholePath );
+        String key = getAccessKey( req.getMethod(), wholePath );
+        accessesByPath.merge(key, 1, Integer::sum);
 
-        logger.info( "Looking up expectation for: {}", key );
-
-        final Integer i = accessesByPath.get( key );
-        if ( i == null )
+        boolean handled = handle( key, req, resp );
+        if (!handled)
         {
-            accessesByPath.put( key, 1 );
-        }
-        else
-        {
-            accessesByPath.put( key, i + 1 );
+            // try simple path
+            String simplePath = getSimplePath(req);
+            if (!simplePath.equals(wholePath))
+            {
+                key = getAccessKey(req.getMethod(), simplePath);
+                handled = handle(key, req, resp);
+            }
         }
 
+        if (!handled)
+        {
+            resp.setStatus( 404 );
+        }
+    }
+
+    private boolean handle(String key, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException
+    {
         logger.info( "Looking for error: '{}' in:\n{}", key, errors );
         if ( errors.containsKey( key ) )
         {
@@ -170,7 +176,6 @@ public final class ExpectationServlet
             if ( error.handler() != null )
             {
                 error.handler().handle( req, resp );
-                return;
             }
             else if ( error.body() != null )
             {
@@ -185,29 +190,26 @@ public final class ExpectationServlet
             {
                 resp.sendError( error.code() );
             }
-
-            return;
+            return true;
         }
 
         logger.info( "Looking for expectation: '{}'", key );
-        final ContentResponse expectation = expectations.get( key );
-        if ( expectation != null )
+        if ( expectations.containsKey( key ) )
         {
+            final ContentResponse expectation = expectations.get( key );
             logger.info( "Responding via registered expectation: {}", expectation );
 
             if ( expectation.handler() != null )
             {
                 expectation.handler().handle( req, resp );
                 logger.info( "Using handler..." );
-                return;
             }
             else if ( expectation.body() != null )
             {
                 resp.setStatus( expectation.code() );
 
                 logger.info( "Set status: {} with body string", expectation.code() );
-                resp.getWriter()
-                    .write( expectation.body() );
+                resp.getWriter().write( expectation.body() );
             }
             else if ( expectation.bodyStream() != null )
             {
@@ -221,13 +223,15 @@ public final class ExpectationServlet
                 resp.setStatus( expectation.code() );
                 logger.info( "Set status: {} with no body", expectation.code() );
             }
-
-            return;
+            return true;
         }
 
-        resp.setStatus( 404 );
+        return false;
     }
 
+    /**
+     * Get path with query string.
+     */
     private String getWholePath( HttpServletRequest request )
     {
         String requestURI = request.getRequestURI();
@@ -241,6 +245,11 @@ public final class ExpectationServlet
         {
             return requestURI + "?" + queryString;
         }
+    }
+
+    private String getSimplePath( HttpServletRequest request )
+    {
+        return request.getRequestURI();
     }
 
     public String getAccessKey( final CommonMethod method, final String path )
