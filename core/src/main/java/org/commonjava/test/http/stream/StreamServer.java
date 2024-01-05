@@ -28,8 +28,8 @@ import org.commonjava.test.http.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
