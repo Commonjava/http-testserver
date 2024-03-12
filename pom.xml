@@ -29,7 +29,7 @@
   <packaging>pom</packaging>
 
   <name>http-testserver</name>
-  <inceptionYear>2011-2022</inceptionYear>
+  <inceptionYear>2011-2024</inceptionYear>
 
   <scm>
     <connection>scm:git:https://github.com/Commonjava/http-testserver</connection>
@@ -59,7 +59,7 @@
       <dependency>
         <groupId>org.commonjava.boms</groupId>
         <artifactId>web-commons-bom</artifactId>
-        <version>28</version>
+        <version>29</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
