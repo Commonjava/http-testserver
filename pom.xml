@@ -44,7 +44,7 @@
     <javaVersion>11</javaVersion>
     <undertowVersion>2.3.10.Final</undertowVersion>
     <slf4j.versoin>1.7.25</slf4j.versoin>
-    <quarkus.version>3.6.4</quarkus.version>
+    <quarkus.version>3.6.9</quarkus.version>
   </properties>
 
   <dependencyManagement>
