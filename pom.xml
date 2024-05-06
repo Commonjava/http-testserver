@@ -25,7 +25,7 @@
 
   <groupId>org.commonjava.util</groupId>
   <artifactId>http-testserver-parent</artifactId>
-  <version>2.3.0-SNAPSHOT</version>
+  <version>2.3.0</version>
   <packaging>pom</packaging>
 
   <name>http-testserver</name>
@@ -35,7 +35,7 @@
     <connection>scm:git:https://github.com/Commonjava/http-testserver</connection>
     <developerConnection>scm:git:https://github.com/Commonjava/http-testserver</developerConnection>
     <url>https://github.com/Commonjava/http-testserver</url>
-    <tag>HEAD</tag>
+    <tag>http-testserver-parent-2.3.0</tag>
   </scm>
 
   <properties>
@@ -96,7 +96,7 @@
       <dependency>
         <groupId>org.commonjava.util</groupId>
         <artifactId>http-testserver-core</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>2.3.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
