@@ -17,11 +17,11 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>org.commonjava</groupId>
     <artifactId>commonjava</artifactId>
-    <version>18</version>
+    <version>21</version>
   </parent>
 
   <groupId>org.commonjava.util</groupId>
@@ -37,13 +37,12 @@
     <url>https://github.com/Commonjava/http-testserver</url>
     <tag>HEAD</tag>
   </scm>
-  
+
   <properties>
     <projectOwner>Red Hat, Inc.</projectOwner>
-    <projectEmail>http://github.com/Commonjava/http-testserver</projectEmail>
+    <projectEmail>https://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>11</javaVersion>
-    <undertowVersion>2.2.26.Final</undertowVersion>
-    <slf4j.versoin>1.7.25</slf4j.versoin>
+    <undertowVersion>2.2.38.Final</undertowVersion>
   </properties>
 
   <dependencyManagement>
@@ -51,7 +50,7 @@
       <dependency>
         <groupId>org.commonjava.boms</groupId>
         <artifactId>web-commons-bom</artifactId>
-        <version>29</version>
+        <version>30</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -72,7 +71,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <dependencies>
     <dependency>
       <groupId>io.undertow</groupId>
@@ -96,6 +95,10 @@
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -106,10 +109,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
