@@ -16,7 +16,7 @@
 package org.commonjava.test.http.stream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.commonjava.test.http.common.CommonMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
