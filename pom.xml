@@ -26,7 +26,7 @@
 
   <groupId>org.commonjava.util</groupId>
   <artifactId>http-testserver</artifactId>
-  <version>1.5.2</version>
+  <version>1.5.3-SNAPSHOT</version>
 
   <name>http-testserver</name>
   <inceptionYear>2011-2024</inceptionYear>
