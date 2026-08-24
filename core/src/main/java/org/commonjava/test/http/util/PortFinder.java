@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2011-2024 Red Hat, Inc. (https://github.com/Commonjava/http-testserver)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,62 +16,75 @@
 package org.commonjava.test.http.util;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
-import java.util.Random;
-
-import org.apache.commons.io.IOUtils;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public final class PortFinder
 {
-    private static final Random RANDOM = new Random();
 
     private PortFinder()
     {
     }
 
-    public static <T> T findPortFor( final int maxTries, PortConsumer<T> consumer )
+    public static <T> T findPortFor( final int maxTries, final PortConsumer<T> consumer )
     {
+        Exception lastException = null;
+
         for ( int i = 0; i < maxTries; i++ )
         {
-            final int port = 1024 + ( Math.abs( RANDOM.nextInt() ) % 30000 );
-            T result = null;
+            final int port = findOpenPort( maxTries );
+
             try
             {
                 return consumer.call( port );
             }
             catch ( final IOException e )
             {
+                lastException = e;
+            }
+            catch ( final RuntimeException e )
+            {
+                if ( !isBindException( e ) )
+                {
+                    throw e;
+                }
+
+                lastException = e;
             }
         }
 
-        throw new IllegalStateException( "Cannot find open port after " + maxTries + " attempts." );
+        throw new IllegalStateException( "Cannot find open port after " + maxTries + " attempts.", lastException );
     }
 
-//    public static int findOpenPort( final int maxTries )
-//    {
-//        for ( int i = 0; i < maxTries; i++ )
-//        {
-//            final int port = 1024 + ( Math.abs( RANDOM.nextInt() ) % 30000 );
-//            ServerSocket sock = null;
-//            try
-//            {
-//                sock = new ServerSocket( port );
-//                return port;
-//            }
-//            catch ( final IOException e )
-//            {
-//            }
-//            finally
-//            {
-//                IOUtils.closeQuietly( sock );
-//            }
-//        }
-//
-//        throw new IllegalStateException( "Cannot find open port after " + maxTries + " attempts." );
-//    }
+    public static int findOpenPort( final int maxTries )
+    {
+        IOException lastException = null;
+
+        for ( int i = 0; i < maxTries; i++ )
+        {
+            try ( ServerSocket socket = new ServerSocket( 0 ) )
+            {
+                return socket.getLocalPort();
+            }
+            catch ( final IOException e )
+            {
+                lastException = e;
+            }
+        }
+
+        throw new IllegalStateException( "Cannot find open port after " + maxTries + " attempts.", lastException );
+    }
+
+    private static boolean isBindException( final Throwable t )
+    {
+        return Stream.iterate( t, Objects::nonNull, Throwable::getCause )
+                     .anyMatch( BindException.class::isInstance );
+    }
 
     public interface PortConsumer<T>
     {
-        T call(int port) throws IOException;
+        T call( int port ) throws IOException;
     }
 }
