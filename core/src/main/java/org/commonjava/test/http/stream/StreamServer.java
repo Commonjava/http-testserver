@@ -113,7 +113,7 @@ public class StreamServer
             foundPort.set( p );
             try
             {
-                Undertow s = Undertow.builder().setHandler( dm.start() ).addHttpListener( port, "127.0.0.1" ).build();
+                Undertow s = Undertow.builder().setHandler( dm.start() ).addHttpListener( p, "127.0.0.1" ).build();
 
                 s.start();
                 return s;
