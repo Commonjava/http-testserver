@@ -27,6 +27,7 @@ import org.commonjava.test.http.expect.ExpectationServer;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -94,7 +95,7 @@ public class TestHttpServerWithQuarkus
         {
             response = client.execute( request );
             stream = response.getEntity().getContent();
-            final String result = IOUtils.toString( stream );
+            final String result = IOUtils.toString( stream, StandardCharsets.UTF_8 );
 
             assertThat( result, notNullValue() );
             assertThat( result, equalTo( content ) );
