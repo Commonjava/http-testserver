@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2011-2024 Red Hat, Inc. (https://github.com/Commonjava/http-testserver)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
