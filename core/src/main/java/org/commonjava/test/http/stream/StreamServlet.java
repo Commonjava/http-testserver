@@ -36,12 +36,14 @@ import java.util.Map;
 public final class StreamServlet
         extends HttpServlet
 {
-    private final Logger logger = LoggerFactory.getLogger( getClass() );
+    private static final Logger logger = LoggerFactory.getLogger( StreamServlet.class );
 
     private static final long serialVersionUID = 1L;
 
+    @SuppressWarnings( "serial" )
     private final Map<String, Integer> accessesByPath = new HashMap<>();
 
+    @SuppressWarnings( "serial" )
     private StreamResolver resolver;
 
     public StreamServlet()
