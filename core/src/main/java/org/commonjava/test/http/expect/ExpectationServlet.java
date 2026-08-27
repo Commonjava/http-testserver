@@ -44,16 +44,19 @@ import org.slf4j.LoggerFactory;
 public final class ExpectationServlet
         extends HttpServlet
 {
-    private final Logger logger = LoggerFactory.getLogger( getClass() );
+    private static final Logger logger = LoggerFactory.getLogger( ExpectationServlet.class );
 
     private static final long serialVersionUID = 1L;
 
     private final String baseResource;
 
+    @SuppressWarnings( "serial" )
     private final Map<String, ContentResponse> expectations = new HashMap<>();
 
+    @SuppressWarnings( "serial" )
     private final Map<String, Integer> accessesByPath = new HashMap<>();
 
+    @SuppressWarnings( "serial" )
     private final Map<String, ContentResponse> errors = new HashMap<>();
 
     public ExpectationServlet()
