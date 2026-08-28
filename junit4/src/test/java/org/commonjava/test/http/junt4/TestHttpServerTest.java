@@ -29,10 +29,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestHttpServerTest
 {
@@ -94,7 +95,7 @@ public class TestHttpServerTest
         try(CloseableHttpResponse response = client.execute( request ))
         {
             InputStream stream = response.getEntity().getContent();
-            return IOUtils.toString( stream );
+            return IOUtils.toString( stream, StandardCharsets.UTF_8 );
         }
         finally
         {
