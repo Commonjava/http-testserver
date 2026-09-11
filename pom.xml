@@ -44,7 +44,7 @@
     <javaVersion>11</javaVersion>
     <maven.compiler.release>${javaVersion}</maven.compiler.release>
     <undertowVersion>2.3.24.Final</undertowVersion>
-    <quarkus.version>3.6.9</quarkus.version>
+    <quarkus.version>3.39.2</quarkus.version>
   </properties>
 
   <dependencyManagement>
