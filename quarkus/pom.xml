@@ -29,6 +29,22 @@
   <name>http-testserver-quarkus</name>
   <packaging>jar</packaging>
 
+  <properties>
+    <quarkus.version>3.6.9</quarkus.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-bom</artifactId>
+        <version>${quarkus.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.commonjava.util</groupId>
