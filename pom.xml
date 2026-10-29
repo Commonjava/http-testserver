@@ -43,7 +43,7 @@
     <projectEmail>https://github.com/Commonjava/http-testserver</projectEmail>
     <javaVersion>11</javaVersion>
     <maven.compiler.release>${javaVersion}</maven.compiler.release>
-    <undertowVersion>2.3.26.Final</undertowVersion>
+    <undertowVersion>2.3.27.Final</undertowVersion>
   </properties>
 
   <dependencyManagement>
