@@ -32,6 +32,8 @@ updates:
     # a compromised new version
     cooldown:
       default-days: 7
+      exclude:
+        - "project-ncl/shared-github-actions/*"
   # Same updates, for 1.x
   - package-ecosystem: "maven"
     directory: "/"
@@ -51,6 +53,8 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+      exclude:
+        - "project-ncl/shared-github-actions/*"
     ignore:
       - dependency-name: "io.undertow:*"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
