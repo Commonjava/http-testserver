@@ -23,6 +23,9 @@ updates:
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
       - dependency-name: "io.undertow:*"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # junit5 module stays on JUnit 5, the junit6 module covers JUnit 6
+      - dependency-name: "org.junit.jupiter:*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions" # Also update Github actions
     directory: "/"
     schedule:
