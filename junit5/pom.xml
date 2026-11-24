@@ -37,6 +37,8 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <!-- JUnit 5 line. The JUnit 6 line lives in ../junit6, which reuses these sources. -->
+      <version>5.14.4</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

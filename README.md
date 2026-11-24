@@ -64,6 +64,16 @@ or:
         }
     }
 
+#### Choosing the artifact
+
+| Test framework | Artifact | Java |
+|---|---|---|
+| JUnit 4 | `http-testserver-junit4` | 11+ |
+| JUnit 5 | `http-testserver-junit5` (built against JUnit Jupiter 5.14.x) | 11+ |
+| JUnit 6 | `http-testserver-junit6` (built against JUnit Jupiter 6.x) | 17+ |
+
+The JUnit 5 and 6 artifacts expose the same classes in the same `org.commonjava.test.http.junit5` package, so switching only requires changing the artifactId.
+
 #### Quarkus Based Test
 
 There are some limitations to let junit5 @ExtendWith work together with @QuarkusTest, see https://github.com/quarkusio/quarkus/issues/24911#issuecomment-1098935690  
